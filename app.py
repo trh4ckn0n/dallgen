@@ -1,68 +1,74 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import openai, os
+import openai
+import os
 from dotenv import load_dotenv
-from db import init_db, insert_image, get_history
+from db import init_db, insert_image, get_history, delete_image, reset_db
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
-admin_password = os.getenv("ADMIN_PASSWORD")
 
 app = Flask(__name__)
-app.secret_key = "supersecret"  # change for prod
-
-init_db()
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "change_this_secret")
+openai.api_key = os.getenv("OPENAI_API_KEY")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     image_urls = []
     if request.method == 'POST':
         prompt = request.form['prompt']
-        style = request.form['style']
-        size = request.form['size']
-        n_images = int(request.form['n_images'])
-
-        full_prompt = f"{prompt}, style {style}, signé style by trhacknon"
+        style = request.form.get('style', '')
+        size = request.form.get('size', '1024x1024')
+        full_prompt = f"{prompt}, style {style}" if style else prompt
 
         try:
             response = openai.Image.create(
                 prompt=full_prompt,
-                n=n_images,
+                n=3,
                 size=size,
                 model="dall-e-3"
             )
-            for data in response['data']:
-                url = data['url']
-                image_urls.append(url)
+            for item in response['data']:
+                url = item['url']
                 insert_image(full_prompt, url)
+                image_urls.append(url)
         except Exception as e:
             image_urls.append(f"Erreur : {str(e)}")
 
     return render_template('index.html', image_urls=image_urls)
 
-@app.route('/admin', methods=['GET', 'POST'])
+# Admin login
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        if request.form['password'] == ADMIN_PASSWORD:
+            session['admin'] = True
+            return redirect('/admin')
+        return "Mot de passe incorrect"
+    return render_template('admin_login.html')
+
+# Admin dashboard
+@app.route('/admin')
 def admin():
-    if 'logged_in' not in session:
-        return redirect(url_for('login'))
+    if not session.get('admin'):
+        return redirect('/admin/login')
     history = get_history()
     return render_template('admin.html', history=history)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        if request.form['password'] == admin_password:
-            session['logged_in'] = True
-            return redirect(url_for('admin'))
-    return '''
-        <form method="post" style="text-align:center; margin-top:100px;">
-            <input type="password" name="password" placeholder="Mot de passe admin">
-            <button type="submit">Connexion</button>
-        </form>
-    '''
+# Supprimer une image
+@app.route('/admin/delete/<int:image_id>', methods=['POST'])
+def admin_delete(image_id):
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    delete_image(image_id)
+    return redirect('/admin')
 
-@app.route('/logout')
-def logout():
-    session.pop('logged_in', None)
-    return redirect(url_for('index'))
+# Réinitialiser la base
+@app.route('/admin/reset', methods=['POST'])
+def admin_reset():
+    if not session.get('admin'):
+        return redirect('/admin/login')
+    reset_db()
+    return "Base de données réinitialisée"
 
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0")
