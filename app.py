@@ -57,7 +57,7 @@ def index():
                 prompt=full_prompt,
                 n=n,
                 size=size,
-                # model="dall-e-3"  # Optionnel : commenter si erreur
+                model="dall-e-3"  # Optionnel : commenter si erreur
             )
             for item in response['data']:
                 url = item['url']
