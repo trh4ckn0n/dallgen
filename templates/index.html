@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Trhacknon AI Image Generator</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 </head>
 <body>
     <h1>🧠 Trhacknon DALL·E 3 Generator</h1>
 
+    <!-- Affichage des messages flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
     <form method="post">
-        <input type="text" name="prompt" placeholder="Décris ton image de hacker, anonymous, cyberpunk..." required style="width:80%;">
+        <input type="text" name="prompt" placeholder="Décris ton image de hacker, anonymous, cyberpunk..." required style="width:80%;" />
         <br><br>
 
         <label>🎨 Style :</label>
@@ -30,25 +41,28 @@
         </select>
 
         <label>🖼️ Nombre :</label>
-        <input type="number" name="n" min="1" max="5" value="3" style="width: 60px;">
+        <input type="number" name="n" min="1" max="5" value="3" style="width: 60px;" />
 
         <br><br>
         <button type="submit">⚡ Générer les images</button>
     </form>
 
-    <hr>
+    <hr />
 
     {% if image_urls %}
+        <div class="images-container">
         {% for url in image_urls %}
             {% if url.startswith("Erreur") %}
                 <div class="error-box" style="color:red;font-weight:bold;">{{ url }}</div>
             {% else %}
-                <img src="{{ url }}" width="300">
+                <img src="{{ url }}" width="300" loading="lazy" alt="Image générée par AI" />
             {% endif %}
         {% endfor %}
+        </div>
     {% endif %}
 
-    <hr>
+    <hr />
+
     <div style="margin-top: 20px;">
         <a href="{{ url_for('admin_login') }}">🔐 Accès admin</a>
     </div>
