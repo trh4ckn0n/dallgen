@@ -1,55 +1,55 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import openai
-import os
+import openai, os
 from dotenv import load_dotenv
-from datetime import datetime
+from db import init_db, insert_image, get_history
 
 load_dotenv()
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
 admin_password = os.getenv("ADMIN_PASSWORD")
 
 app = Flask(__name__)
-app.secret_key = "supersecret"  # change me for production
+app.secret_key = "supersecret"  # change for prod
 
-history = []  # in-memory history (can be written to file/db)
+init_db()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    image_url = None
+    image_urls = []
     if request.method == 'POST':
         prompt = request.form['prompt']
-        size = request.form['size']
         style = request.form['style']
+        size = request.form['size']
+        n_images = int(request.form['n_images'])
+
         full_prompt = f"{prompt}, style {style}, signé style by trhacknon"
+
         try:
             response = openai.Image.create(
                 prompt=full_prompt,
-                n=1,
+                n=n_images,
                 size=size,
                 model="dall-e-3"
             )
-            image_url = response['data'][0]['url']
-            history.append({
-                'prompt': full_prompt,
-                'image_url': image_url,
-                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            })
+            for data in response['data']:
+                url = data['url']
+                image_urls.append(url)
+                insert_image(full_prompt, url)
         except Exception as e:
-            image_url = f"Erreur : {str(e)}"
-    return render_template('index.html', image_url=image_url)
+            image_urls.append(f"Erreur : {str(e)}")
+
+    return render_template('index.html', image_urls=image_urls)
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if 'logged_in' not in session:
         return redirect(url_for('login'))
+    history = get_history()
     return render_template('admin.html', history=history)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        pwd = request.form['password']
-        if pwd == admin_password:
+        if request.form['password'] == admin_password:
             session['logged_in'] = True
             return redirect(url_for('admin'))
     return '''
