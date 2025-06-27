@@ -52,7 +52,12 @@ def admin_login():
 def admin():
     if not session.get('admin'):
         return redirect('/admin/login')
-    history = get_history()
+    try:
+        history = get_history()
+    except Exception as e:
+        history = []
+        error = f"⚠️ Erreur : {str(e)} — la base semble ne pas être initialisée."
+        return render_template('admin.html', history=history, error=error)
     return render_template('admin.html', history=history)
 
 # Supprimer une image
