@@ -39,14 +39,13 @@
     <hr>
 
     {% if image_urls %}
-        <h2>🖼️ Résultat</h2>
-        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
         {% for url in image_urls %}
-            <div>
-                <img src="{{ url }}" width="300" alt="Generated image">
-            </div>
+            {% if url.startswith("Erreur") %}
+                <div class="error-box" style="color:red;font-weight:bold;">{{ url }}</div>
+            {% else %}
+                <img src="{{ url }}" width="300">
+            {% endif %}
         {% endfor %}
-        </div>
     {% endif %}
 
     <hr>
