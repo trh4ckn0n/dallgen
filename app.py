@@ -37,6 +37,11 @@ def index():
             image_urls.append(error_msg)
             return render_template('index.html', image_urls=image_urls)
 
+        # Ici, tu dois ajouter un return
+        return render_template('index.html', image_urls=image_urls)
+
+    # GET : afficher page vide sans images
+    return render_template('index.html', image_urls=[])
 # Admin login
 @app.route('/admin/login', methods=['GET', 'POST'])
 def admin_login():
