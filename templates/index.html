@@ -8,32 +8,45 @@
 <body>
     <div class="container">
         <h1><span class="glow">trhacknon</span> DALL·E Generator</h1>
-        <form method="POST">
-            <textarea name="prompt" placeholder="Décris ton image..." required></textarea>
-            <select name="style">
-                <option value="cyberpunk">Cyberpunk</option>
-                <option value="réaliste">Réaliste</option>
-                <option value="cartoon">Cartoon</option>
-                <option value="matrix">Matrix</option>
-                <option value="futuriste">Futuriste</option>
-            </select>
-            <select name="size">
-                <option value="256x256">Petite (256x256)</option>
-                <option value="512x512">Moyenne (512x512)</option>
-                <option value="1024x1024" selected>Grande (1024x1024)</option>
-            </select>
-            <button type="submit">🎨 Générer</button>
-        </form>
-        {% if image_url %}
-            <div class="result">
-                <h2>🖼️ Image générée :</h2>
-                {% if 'http' in image_url %}
-                    <img src="{{ image_url }}" alt="Image générée">
-                {% else %}
-                    <p class="error">{{ image_url }}</p>
-                {% endif %}
-            </div>
-        {% endif %}
+<form method="POST">
+    <textarea name="prompt" placeholder="Décris ton image..." required></textarea>
+
+    <select name="style">
+        <option value="cyberpunk">Cyberpunk</option>
+        <option value="réaliste">Réaliste</option>
+        <option value="cartoon">Cartoon</option>
+        <option value="matrix">Matrix</option>
+        <option value="futuriste">Futuriste</option>
+    </select>
+
+    <select name="size">
+        <option value="256x256">256x256</option>
+        <option value="512x512">512x512</option>
+        <option value="1024x1024" selected>1024x1024</option>
+    </select>
+
+    <select name="n_images">
+        <option value="1" selected>1 image</option>
+        <option value="2">2 images</option>
+        <option value="3">3 images</option>
+        <option value="4">4 images</option>
+    </select>
+
+    <button type="submit">🎨 Générer</button>
+</form>
+
+{% if image_urls %}
+    <div class="result">
+        <h2>Résultat :</h2>
+        {% for url in image_urls %}
+            {% if "http" in url %}
+                <img src="{{ url }}" width="300">
+            {% else %}
+                <p class="error">{{ url }}</p>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
         <p><a href="/admin">🔐 Espace Admin</a></p>
     </div>
 </body>
