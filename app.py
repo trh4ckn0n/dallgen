@@ -1,6 +1,6 @@
+import os
 from flask import Flask, render_template, request, redirect, url_for, session
 import openai
-import os
 from dotenv import load_dotenv
 from db import init_db, insert_image, get_history, delete_image, reset_db
 
