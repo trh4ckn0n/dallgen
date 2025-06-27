@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS images (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    prompt TEXT,
-    image_url TEXT,
-    timestamp TEXT
+    prompt TEXT NOT NULL,
+    image_url TEXT NOT NULL,
+    timestamp TEXT NOT NULL
 );
