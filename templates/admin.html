@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Historique des Générations</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🧠 Historique des images</h1>
+        <a href="/logout">🔓 Déconnexion</a>
+        {% for entry in history[::-1] %}
+            <div class="card">
+                <p><b>Prompt :</b> {{ entry.prompt }}</p>
+                <p><b>Date :</b> {{ entry.timestamp }}</p>
+                <img src="{{ entry.image_url }}" alt="image générée">
+            </div>
+        {% else %}
+            <p>Aucune image générée encore.</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
