@@ -1,5 +1,17 @@
-<h2>Connexion admin</h2>
-<form method="post">
-    <input type="password" name="password" placeholder="Mot de passe admin">
-    <input type="submit" value="Connexion">
-</form>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion Admin - Trhacknon AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>🔐 Admin Login</h1>
+    <form method="post">
+        <input type="password" name="password" placeholder="Mot de passe admin" required>
+        <br><br>
+        <input type="submit" value="Connexion">
+    </form>
+    <div class="trhacknon-tag">admin system — trhacknon</div>
+</body>
+</html>
