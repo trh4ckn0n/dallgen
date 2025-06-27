@@ -95,3 +95,44 @@ button {
     margin: 10px 0;
     border: 1px solid #0ff;
 }
+
+.flashes {
+  list-style-type: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.flashes li {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.flashes li.success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.flashes li.error {
+  background-color: #f44336;
+  color: white;
+}
+
+.error-box {
+  background-color: #ffdddd;
+  padding: 10px;
+  border: 1px solid red;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.images-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+.images-container img {
+  border-radius: 8px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.3);
+}
