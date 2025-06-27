@@ -7,15 +7,22 @@
 </head>
 <body>
     <div class="container">
-        <h1>🧠 Historique</h1>
-<a href="/logout">Déconnexion</a>
-{% for prompt, url, time in history %}
-    <div class="card">
-        <p><b>Prompt :</b> {{ prompt }}</p>
-        <p><b>Date :</b> {{ time }}</p>
-        <img src="{{ url }}" width="300">
-    </div>
-{% endfor %}
+<h2>Historique des images générées</h2>
+<form method="post" action="/admin/reset" onsubmit="return confirm('Réinitialiser la base ?')">
+    <button type="submit">Réinitialiser la base</button>
+</form>
+
+<ul>
+    {% for id, prompt, url, ts in history %}
+        <li>
+            <p><b>{{ prompt }}</b> — {{ ts }}</p>
+            <img src="{{ url }}" width="300">
+            <form method="post" action="/admin/delete/{{ id }}">
+                <button type="submit">Supprimer</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
     </div>
 </body>
 </html>
