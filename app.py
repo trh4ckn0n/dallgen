@@ -16,6 +16,7 @@ def index():
     image_urls = []
     if request.method == 'POST':
         prompt = request.form['prompt']
+        n = int(request.form.get('n', 3))
         style = request.form.get('style', '')
         size = request.form.get('size', '1024x1024')
         full_prompt = f"{prompt}, style {style}" if style else prompt
