@@ -2,27 +2,28 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Historique des Générations</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <title>Admin Dashboard - Trhacknon AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <div class="container">
-<h2>Historique des images générées</h2>
-<form method="post" action="/admin/reset" onsubmit="return confirm('Réinitialiser la base ?')">
-    <button type="submit">Réinitialiser la base</button>
-</form>
+    <h1>📜 Historique des images générées</h1>
+    <form method="post" action="/admin/reset" onsubmit="return confirm('Réinitialiser toute la base ?')">
+        <button type="submit">🧨 Réinitialiser la base</button>
+    </form>
 
-<ul>
-    {% for id, prompt, url, ts in history %}
-        <li>
-            <p><b>{{ prompt }}</b> — {{ ts }}</p>
-            <img src="{{ url }}" width="300">
-            <form method="post" action="/admin/delete/{{ id }}">
-                <button type="submit">Supprimer</button>
+    <hr>
+
+    {% for id, prompt, url, timestamp in history %}
+        <div style="margin-bottom:20px;">
+            <p><b>{{ prompt }}</b><br><small>⏱️ {{ timestamp }}</small></p>
+            <img src="{{ url }}" width="250">
+            <form method="post" action="/admin/delete/{{ id }}" style="display:inline;">
+                <button type="submit">❌ Supprimer</button>
             </form>
-        </li>
+        </div>
+        <hr>
     {% endfor %}
-</ul>
-    </div>
+
+    <div class="trhacknon-tag">interface admin by trhacknon 👨‍💻</div>
 </body>
 </html>
