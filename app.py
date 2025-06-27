@@ -70,5 +70,12 @@ def admin_reset():
     reset_db()
     return "Base de données réinitialisée"
 
+@app.route('/admin/initdb', methods=['POST'])
+def admin_initdb():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    init_db()
+    return redirect(url_for('admin_dashboard'))
+
 if __name__ == '__main__':
     app.run(debug=False, host="0.0.0.0")
