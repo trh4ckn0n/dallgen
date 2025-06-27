@@ -10,7 +10,9 @@
     <form method="post" action="/admin/reset" onsubmit="return confirm('Réinitialiser toute la base ?')">
         <button type="submit">🧨 Réinitialiser la base</button>
     </form>
-
+<form method="post" action="/admin/initdb" onsubmit="return confirm('Tu veux vraiment réinitialiser toute la base (initdb) ?')">
+    <button type="submit">⚙️ Reinitialiser via init_db()</button>
+</form>
     <hr>
 
     {% for id, prompt, url, timestamp in history %}
