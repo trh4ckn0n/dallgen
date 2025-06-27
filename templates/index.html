@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>🧠 Générateur d’Images Hacker</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1><span class="glow">trhacknon</span> DALL·E Generator</h1>
+        <form method="POST">
+            <textarea name="prompt" placeholder="Décris ton image..." required></textarea>
+            <select name="style">
+                <option value="cyberpunk">Cyberpunk</option>
+                <option value="réaliste">Réaliste</option>
+                <option value="cartoon">Cartoon</option>
+                <option value="matrix">Matrix</option>
+                <option value="futuriste">Futuriste</option>
+            </select>
+            <select name="size">
+                <option value="256x256">Petite (256x256)</option>
+                <option value="512x512">Moyenne (512x512)</option>
+                <option value="1024x1024" selected>Grande (1024x1024)</option>
+            </select>
+            <button type="submit">🎨 Générer</button>
+        </form>
+        {% if image_url %}
+            <div class="result">
+                <h2>🖼️ Image générée :</h2>
+                {% if 'http' in image_url %}
+                    <img src="{{ image_url }}" alt="Image générée">
+                {% else %}
+                    <p class="error">{{ image_url }}</p>
+                {% endif %}
+            </div>
+        {% endif %}
+        <p><a href="/admin">🔐 Espace Admin</a></p>
+    </div>
+</body>
+</html>
