@@ -1,11 +1,15 @@
 import sqlite3
+import os
 from datetime import datetime
 
 DB_NAME = 'history.db'
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SCHEMA_PATH = os.path.join(BASE_DIR, 'schema.sql')
+
 def init_db():
     with sqlite3.connect(DB_NAME) as conn:
-        with open("schema.sql", "r") as f:
+        with open(SCHEMA_PATH, "r") as f:
             conn.executescript(f.read())
 
 def insert_image(prompt, url):
