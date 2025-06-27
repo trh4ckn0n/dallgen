@@ -7,10 +7,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SCHEMA_PATH = os.path.join(BASE_DIR, 'schema.sql')
 
 def init_db():
+    print("SCHEMA_PATH =", SCHEMA_PATH)
+    print("Exists ?", os.path.exists(SCHEMA_PATH))
+    with open(SCHEMA_PATH, "r") as f:
+        schema_sql = f.read()
     with sqlite3.connect(DB_NAME) as conn:
-        with open(SCHEMA_PATH, "r") as f:
-            conn.executescript(f.read())
-
+        conn.executescript(schema_sql)
+        
 def reset_db():
     if os.path.exists(DB_NAME):
         os.remove(DB_NAME)
