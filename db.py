@@ -3,17 +3,19 @@ import sqlite3
 from datetime import datetime
 
 DB_NAME = 'history.db'
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-SCHEMA_PATH = os.path.join(BASE_DIR, 'schema.sql')
 
 def init_db():
-    print("SCHEMA_PATH =", SCHEMA_PATH)
-    print("Exists ?", os.path.exists(SCHEMA_PATH))
-    with open(SCHEMA_PATH, "r") as f:
-        schema_sql = f.read()
+    schema_sql = """
+    CREATE TABLE IF NOT EXISTS images (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        prompt TEXT NOT NULL,
+        image_url TEXT NOT NULL,
+        timestamp TEXT NOT NULL
+    );
+    """
     with sqlite3.connect(DB_NAME) as conn:
         conn.executescript(schema_sql)
-        
+
 def reset_db():
     if os.path.exists(DB_NAME):
         os.remove(DB_NAME)
@@ -22,8 +24,10 @@ def reset_db():
 def insert_image(prompt, url):
     with sqlite3.connect(DB_NAME) as conn:
         cur = conn.cursor()
-        cur.execute("INSERT INTO images (prompt, image_url, timestamp) VALUES (?, ?, ?)",
-                    (prompt, url, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+        cur.execute(
+            "INSERT INTO images (prompt, image_url, timestamp) VALUES (?, ?, ?)",
+            (prompt, url, datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+        )
         conn.commit()
 
 def get_history():
