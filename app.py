@@ -23,7 +23,7 @@ def index():
         try:
             response = openai.Image.create(
                 prompt=full_prompt,
-                n=3,
+                n=n,
                 size=size,
                 model="dall-e-3"
             )
