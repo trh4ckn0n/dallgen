@@ -33,9 +33,9 @@ def index():
                 insert_image(full_prompt, url)
                 image_urls.append(url)
         except Exception as e:
-            image_urls.append(f"Erreur : {str(e)}")
-
-    return render_template('index.html', image_urls=image_urls)
+            error_msg = f"Erreur : {str(e)}"
+            image_urls.append(error_msg)
+            return render_template('index.html', image_urls=image_urls)
 
 # Admin login
 @app.route('/admin/login', methods=['GET', 'POST'])
