@@ -7,10 +7,12 @@
 </head>
 <body>
     <h1>🧠 Trhacknon DALL·E 3 Generator</h1>
+
     <form method="post">
         <input type="text" name="prompt" placeholder="Décris ton image de hacker, anonymous, cyberpunk..." required style="width:80%;">
-        <br>
-        <label>Style :</label>
+        <br><br>
+
+        <label>🎨 Style :</label>
         <select name="style">
             <option value="">Aucun style</option>
             <option value="cyberpunk">Cyberpunk</option>
@@ -19,12 +21,17 @@
             <option value="glitch art">Glitch Art</option>
             <option value="dark futuristic">Dark Futuristic</option>
         </select>
-        <label>Taille :</label>
+
+        <label>📐 Taille :</label>
         <select name="size">
             <option value="1024x1024">1024x1024</option>
             <option value="512x512">512x512</option>
             <option value="256x256">256x256</option>
         </select>
+
+        <label>🖼️ Nombre :</label>
+        <input type="number" name="n" min="1" max="5" value="3" style="width: 60px;">
+
         <br><br>
         <button type="submit">⚡ Générer les images</button>
     </form>
@@ -33,10 +40,19 @@
 
     {% if image_urls %}
         <h2>🖼️ Résultat</h2>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
         {% for url in image_urls %}
-            <img src="{{ url }}" width="300">
+            <div>
+                <img src="{{ url }}" width="300" alt="Generated image">
+            </div>
         {% endfor %}
+        </div>
     {% endif %}
+
+    <hr>
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('admin_login') }}">🔐 Accès admin</a>
+    </div>
 
     <div class="trhacknon-tag">by trhacknon ⚡</div>
 </body>
